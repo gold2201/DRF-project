@@ -5,6 +5,7 @@ class Shop(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     public_access = models.BooleanField(default=False)
     shop_name = models.CharField(max_length=255)
+    created_at = models.DateTimeField(auto_now_add=True)
     shop_description = models.CharField(max_length=255)
     shop_creates_name = models.CharField(max_length=50)
 
