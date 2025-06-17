@@ -1,10 +1,11 @@
+from django.contrib.auth.hashers import check_password
 from rest_framework import status
 from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 
-from shops.models import Shop
+from shops.models import Shop, Product
 from shops.serializers import ShopSerializer
 
 class CreateViewShops(APIView):
@@ -24,7 +25,7 @@ class MyShopsListView(APIView):
     def get(self, request):
         user = request.user
         shops = Shop.objects.filter(user=user)
-        serializer = ShopSerializer(shops, many=True)
+        serializer = ShopSerializer(shops, many=True, fields=('shop_name', 'public_access', 'shop_creates_name', 'uuid'))
         return Response(serializer.data)
 
 class WorkWithShopView(APIView):
@@ -51,3 +52,36 @@ class WorkWithShopView(APIView):
         shop = self.check_shop_object(pk)
         shop.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+class AccessedPrivateShopView(APIView):
+
+    def post(self, request):
+        try:
+            shop = Shop.objects.get(access_name=request.data['access_name'])
+        except Shop.DoesNotExist:
+            return Response({'error': 'Shop not found'}, status=status.HTTP_404_NOT_FOUND)
+
+        if check_password(request.data['access_password'], shop.access_password):
+            serializer = ShopSerializer(shop)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        else:
+            return Response({'error': 'Invalid password'}, status=status.HTTP_400_BAD_REQUEST)
+
+class WorkWithAccessedShopView(APIView):
+
+    def get(self, request, uuid):
+        shop = get_object_or_404(Shop, uuid=uuid)
+        serializer = ShopSerializer(shop)
+        return Response(serializer.data)
+
+    def put(self, request, uuid, pk):
+        shop = get_object_or_404(Shop, uuid=uuid)
+        product = get_object_or_404(Product, pk=pk)
+        if shop.currency_amount >= product.product_price and product.product_amount > 0:
+            shop.currency_amount -= product.product_price
+            product.product_amount -= 1
+            product.save()
+            shop.save()
+            return Response(product.message_after_purchase, status=status.HTTP_200_OK)
+        else:
+            return Response({'error': 'Not enough currency'}, status=status.HTTP_402_PAYMENT_REQUIRED)

@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
 
+from django.shortcuts import get_object_or_404
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -8,7 +9,6 @@ from shops.models import Shop
 from shops.serializers import ShopSerializer
 
 class PublicShopsListView(APIView):
-
     def get(self, request):
         filter_by = request.query_params.get('filter_by', None)
 
@@ -23,5 +23,11 @@ class PublicShopsListView(APIView):
         else:
             shops = Shop.objects.filter(public_access=True)
 
-        serializer = ShopSerializer(shops, many=True)
+        serializer = ShopSerializer(shops, many=True, fields = ['shop_name', 'public_access', 'shop_creates_name'])
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+class PublicShopDetailView(APIView):
+    def get(self, request, pk):
+        shop = get_object_or_404(Shop, pk=pk)
+        serializer = ShopSerializer(shop)
         return Response(serializer.data, status=status.HTTP_200_OK)
