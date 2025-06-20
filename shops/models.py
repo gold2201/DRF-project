@@ -1,4 +1,6 @@
 import uuid
+from django.utils import timezone
+
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -7,14 +9,13 @@ class Shop(models.Model):
     uuid = models.UUIDField(default=uuid.uuid4, unique=True, editable=False)
     public_access = models.BooleanField(default=False)
     shop_name = models.CharField(max_length=255)
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(default=timezone.now)
     shop_description = models.TextField()
     shop_creates_name = models.CharField(max_length=50)
     access_name = models.CharField(max_length=50, blank=True, null=True, unique=True)
     access_password = models.CharField(max_length=255, blank=True, null=True)
     currency_name = models.CharField(max_length=255)
     currency_amount = models.PositiveIntegerField(blank=True, null=True)
-
 
 class Product(models.Model):
     shop = models.ForeignKey(Shop, models.CASCADE, related_name='products')

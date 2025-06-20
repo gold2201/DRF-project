@@ -1,15 +1,7 @@
-from django.contrib.auth import get_user_model
 from django.urls import reverse
-from rest_framework import status
-from rest_framework.test import APITestCase, APIClient
-
-
-User = get_user_model()
+from rest_framework.test import APITestCase
 
 class UserRegistrationTestCase(APITestCase):
-    def setUp(self):
-        self.client = APIClient()
-
     def test_user_registration(self):
         url = reverse('register')
         data = {
@@ -30,4 +22,3 @@ class UserRegistrationTestCase(APITestCase):
         response = self.client.post(url, data, format='json')
 
         self.assertEqual(response.status_code, 400)
-
