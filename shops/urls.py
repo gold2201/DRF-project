@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import userViews, publicShopViews, authentificatedShopViews
+from .views import userViews, publicShopViews, authentificatedShopViews, logsViews
 
 urlpatterns = [
     path('register/', userViews.UserRegistration.as_view(), name='register'),
@@ -12,4 +12,5 @@ urlpatterns = [
     path('product-purchase/<uuid:uuid>/<int:pk>/', authentificatedShopViews.WorkWithAccessedShopView.as_view(), name='authorized-shop'),
     path('public-shops/', publicShopViews.PublicShopsListView.as_view(), name='public-shops'),
     path('public-shop-detail/<uuid:uuid>/', publicShopViews.PublicShopDetailView.as_view(), name='public-shop-detail'),
+    path('logs/', logsViews.LogsView.as_view(), name='logs'),
 ]
