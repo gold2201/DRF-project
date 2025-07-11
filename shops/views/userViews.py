@@ -15,6 +15,7 @@ class UserRegistration(APIView):
         description='User registration for create, update, delete their own shops',
         request=UserSerializer,
         responses=UserSerializer,
+        tags=['User'],
 
     )
     def post(self, request):

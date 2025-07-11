@@ -22,6 +22,7 @@ class CreateViewShops(APIView):
         description='Create a new shop after authentication',
         request=ShopSerializer,
         responses=ShopSerializer,
+        tags=['Create Authenticated Shops'],
     )
     def post(self, request):
         serializer = ShopSerializer(data=request.data)
@@ -40,6 +41,7 @@ class MyShopsListView(APIView):
         summary='List all shops',
         description='List all shops owned by a user',
         request=ShopSerializer,
+        tags=['Work with Authenticated Shops'],
     )
     def get(self, request):
         user = request.user
@@ -55,6 +57,7 @@ class WorkWithShopView(APIView):
         summary='Get shop details',
         description='Get shop details about a shop owned by a user',
         request=ShopSerializer,
+        tags=['Work with Authenticated Shops'],
     )
     def get(self, request, pk):
         shop = check_shop_object(pk)
@@ -67,6 +70,7 @@ class WorkWithShopView(APIView):
         description='Update shop details about a shop owned by a user',
         request=ShopSerializer,
         responses=ShopSerializer,
+        tags=['Work with Authenticated Shops'],
     )
     def put(self, request, pk):
         shop = check_shop_object(pk)
@@ -81,6 +85,7 @@ class WorkWithShopView(APIView):
     @extend_schema(
         summary='Delete shop',
         description='Delete shop owned by a user',
+        tags=['Work with Authenticated Shops'],
     )
     def delete(self, request, pk):
         shop = check_shop_object(pk)
@@ -94,6 +99,7 @@ class DeleteProductView(APIView):
     @extend_schema(
         summary='Delete product in specific shop',
         description='Delete product in specific shop owned by a user',
+        tags=['Work with Authenticated Shops'],
     )
     def delete(self, request, pk):
         product = get_object_or_404(Product, pk=pk)
@@ -107,6 +113,7 @@ class AccessedPrivateShopView(APIView):
         summary='Authorization to the private shop',
         description='Authorization to private shop',
         responses=ShopSerializer,
+        tags=['Work with Private Shop'],
     )
     def post(self, request):
         try:
@@ -129,6 +136,7 @@ class WorkWithAccessedShopView(APIView):
         summary='Get shop details',
         description='Get shop details about a shop after authorization in it',
         request=ShopSerializer,
+        tags=['Work with Private Shop'],
     )
     def get(self, request, uuid):
         shop = get_object_or_404(Shop, uuid=uuid)
@@ -139,6 +147,7 @@ class WorkWithAccessedShopView(APIView):
     @extend_schema(
         summary='Making a purchase decision',
         description='Making a purchase decision in private shop',
+        tags=['Work with Private Shop'],
     )
     def put(self, request, uuid, pk):
         shop = get_object_or_404(Shop, uuid=uuid)

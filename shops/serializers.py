@@ -63,7 +63,6 @@ class ShopSerializer(serializers.ModelSerializer):
                 product.save()
         return instance
 
-
     def create_helper(self, validated_data):
         product_data = validated_data.pop('products')
         shop = Shop.objects.create(**validated_data)

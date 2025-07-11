@@ -18,6 +18,7 @@ class PublicShopsListView(APIView):
         summary='Filter and found public shops',
         description='Filter public stores by days, name and display the entire list of public stores',
         responses=ShopSerializer,
+        tags=['Public Shops'],
     )
     def get(self, request):
         filter_by = request.query_params.get('filter_by', None)
@@ -45,6 +46,7 @@ class PublicShopDetailView(APIView):
         summary='Public shop details',
         description='Show more details about a specific public shop',
         responses=ShopSerializer,
+        tags=['Public Shops'],
     )
     def get(self, request, uuid):
         shop = get_object_or_404(Shop, uuid=uuid)
