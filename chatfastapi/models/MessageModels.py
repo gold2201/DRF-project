@@ -1,17 +1,8 @@
-from typing import List
-
 from pydantic import BaseModel
-from datetime import datetime, timezone
+from datetime import datetime
 
-class MessageBase(BaseModel):
+class MessageIn(BaseModel):
     text: str
-    is_read: bool
 
-class MessageCreate(MessageBase):
-    chat_id: int
-
-class MessageRead(MessageBase):
-    id: int
-    chat_id: int
-    user_id: int
+class MessageOut(MessageIn):
     message_time: datetime

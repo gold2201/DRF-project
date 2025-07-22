@@ -45,6 +45,8 @@ def run_migrations_offline() -> None:
 def run_migrations_online() -> None:
     url = os.getenv('SYNC_DATABASE_URL')
 
+    config.set_main_option('sqlalchemy.url', url)
+
     connectable = engine_from_config(
         config.get_section(config.config_ini_section, {}),
         prefix="sqlalchemy.",

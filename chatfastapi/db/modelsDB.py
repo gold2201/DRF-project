@@ -35,7 +35,7 @@ class Message(Base):
 
     id = Column(Integer, primary_key=True)
     text = Column(String)
-    message_time = Column(DateTime, default=datetime.now(timezone.utc))
+    message_time = Column(DateTime(timezone=True), default=datetime.now(timezone.utc))
     is_read = Column(Boolean,default=False)
 
     user_id = Column(Integer, ForeignKey("auth_user.id"), index=True)

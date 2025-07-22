@@ -1,7 +1,6 @@
 from typing import List
 
 from pydantic import BaseModel
-from datetime import datetime, timezone
 
 from models.userModels import UserRead
 
